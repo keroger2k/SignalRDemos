@@ -1,5 +1,6 @@
 ﻿/// <reference path="../scripts/jquery-1.8.2.js" />
 /// <reference path="../scripts/jquery.signalR-0.5.3.js" />
+/// <reference path="../Scripts/jquery.mobile-1.2.0.js" />
 /// <reference path="../Scripts/jquery-ui-1.9.0.js" />
 
 $(function () {
@@ -44,7 +45,7 @@ $(function () {
                  offset = 0,
                  isMouseDown = false;
 
-    $chalkBoard.mousedown(function (e) {
+    $chalkBoard.bind('mousedown vmousedown', function (e) {
         isMouseDown = true;
         if (isMouseDown) {
             offset = $chalkBoard.offset();
