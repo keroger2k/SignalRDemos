@@ -55,7 +55,7 @@ $(function () {
         }
     });
 
-    $chalkBoard.mousemove(function (e) {
+    $chalkBoard.bind('mousemove vmousemove', function (e) {
         if (isMouseDown) {
             mouseX = e.pageX - offset.left;
             mouseY = e.pageY - offset.top;
