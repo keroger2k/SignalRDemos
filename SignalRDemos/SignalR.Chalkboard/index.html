@@ -15,9 +15,14 @@
             background-color: #333;
         }
 
-        #messages, #clientCount {
+        table tr td:first-child {
             font-size: 18px;
             color: #cdcdcd;
+
+        }
+        table tr td:nth-child(2) div {
+            font-size: 18px;
+            color: #808080;
 
         }
     </style>
@@ -42,6 +47,12 @@
                         <td>Messages Sent:</td>
                         <td>
                             <div id="messages"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Transport:</td>
+                        <td>
+                            <div id="transport"></div>
                         </td>
                     </tr>
                 </table>

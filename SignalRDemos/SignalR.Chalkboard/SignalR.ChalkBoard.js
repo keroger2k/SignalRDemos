@@ -7,6 +7,7 @@ $(function () {
     var hub = $.connection.chalkBoard,
         $clientCount = $("#clientCount"),
         $messages = $('#messages'),
+        $transport = $('#transport'),
         count = 0,
         canvas = document.getElementById('chalkboard'),
         context = canvas.getContext('2d');
@@ -70,6 +71,6 @@ $(function () {
     });
 
     $.connection.hub.start().done(function () {
-        
+        $transport.text($.connection.hub.transport.name);
     });
 });
