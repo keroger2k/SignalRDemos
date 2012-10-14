@@ -99,7 +99,6 @@ publish
 # Others
 [Bb]in
 [Oo]bj
-packages
 sql
 TestResults
 *.Cache
