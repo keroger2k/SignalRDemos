@@ -1,10 +1,7 @@
 ﻿using SignalR.Hubs;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace SignalRDemos.SignalR.Chalkboard
 {
@@ -16,19 +13,36 @@ namespace SignalRDemos.SignalR.Chalkboard
 
         private static int messageCount = 0;
 
-        public void lineStarting(double x, double y, string color)
+        public void lineStarting(Coordinate coordinate)
         {
-            Clients.beginLine(x, y, color, messageCount++);
+            Clients.beginLine(coordinate.positionX, coordinate.positionY, Context.ConnectionId.Substring(0, 3));
+            Clients.setMessageCount(messageCount++);
         }
 
-        public void lineDrawing(double x, double y)
+        public void lineDrawing(Coordinate coordinate)
         {
-            Clients.continueLine(x, y, messageCount++);
+            Clients.continueLine(coordinate.positionX, coordinate.positionY);
+            Clients.setMessageCount(messageCount++);
         }
 
-        public void clearCanvas()
+        public Task clearCanvas()
         {
-            Clients.clear();
+            return Clients.clear();
+        }
+
+        public Task joinAdminGroup()
+        {
+            return Groups.Add(Context.ConnectionId, "Admin");
+        }
+
+        public Task leaveAdminGroup()
+        {
+            return Groups.Remove(Context.ConnectionId, "Admin");
+        }
+
+        public Task sendMessage(string message)
+        {
+            return Clients["Admin"].messageAdmins(message);
         }
 
         public Task Connect()
@@ -49,6 +63,12 @@ namespace SignalRDemos.SignalR.Chalkboard
             _connections.TryRemove(Context.ConnectionId, out value);
             return Clients.clientCountChanged(_connections.Count);
         }
+    }
+
+    public class Coordinate
+    {
+        public double positionX { get; set; }
+        public double positionY { get; set; }
     }
 
 }

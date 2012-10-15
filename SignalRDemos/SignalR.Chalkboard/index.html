@@ -6,7 +6,6 @@
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
     <link href="../Content/bootstrap-responsive.min.css" rel="stylesheet" />
     <style type="text/css">
-
         .container .row {
             margin-top: 20px;
         }
@@ -18,8 +17,8 @@
         table tr td:first-child {
             font-size: 14px;
             color: #cdcdcd;
-
         }
+
         table tr td:nth-child(2) div {
             font-size: 14px;
             color: #808080;
@@ -34,6 +33,14 @@
         </div>
     </div>
     <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="alert fade in" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <div id="adminMessage"></div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="span3">
                 <table class="table table-striped">
@@ -62,11 +69,15 @@
             </div>
             <div class="span2">
                 <button id="clear" class="btn btn-large">Clear Board</button>
+                <button id="addAdmin" class="btn btn-large">Join Admins</button>
+                <button id="leaveAdmin" class="btn btn-large">Leave Admins</button>
+                <input type="text" id="adminMessageText" />
+                <button id="sendAdminMessage">Send</button>
             </div>
         </div>
 
     </div>
-    
+
     <script type="text/javascript" src="../Scripts/jquery-1.8.2.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-ui-1.9.0.js"></script>
     <script src="../Scripts/jquery.mobile-1.2.0.js"></script>

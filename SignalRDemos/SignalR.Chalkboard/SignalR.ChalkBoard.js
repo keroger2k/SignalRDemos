@@ -9,41 +9,52 @@ $(function () {
         $clientCount = $("#clientCount"),
         $messages = $('#messages'),
         $transport = $('#transport'),
+        $leaveAdmin = $('#leaveAdmin'),
+        $addAdmin = $('#addAdmin'),
+        $adminMessage = $('#adminMessage'),
+        $adminMessageText = $('#adminMessageText'),
+        $sendMessageButton = $('#sendAdminMessage'),
         count = 0,
         canvas = document.getElementById('chalkboard'),
         context = canvas.getContext('2d');
 
     $.extend(hub, {
-        beginLine: function (startX, startY, color, messageCount) {
-            var lineWidth = 12;
-            context.strokeStyle = color || '#FFF';
-            context.lineWidth = lineWidth;
+        beginLine: function (startX, startY, color) {
+            context.strokeStyle = color;
+            context.lineWidth = 12;
             context.lineCap = 'round';
             context.beginPath();
             context.moveTo(startX, startY);
-            $messages.text(messageCount);
         },
         continueLine: function (mouseX, mouseY, messageCount) {
             context.lineTo(mouseX + 1, mouseY + 1);
             context.stroke();
-            $messages.text(messageCount);
         },
         clear: function() {
             context.clearRect(0, 0, canvas.width, canvas.height);
         },
+        setMessageCount: function (messageCount) {
+            $messages.text(messageCount);
+        },
         clientCountChanged: function (count) {
             $clientCount.text(count);
-        }
+        },
+        messageAdmins: function (message) {
+            $adminMessage.text(message);
+            $('.alert').show();
+            $adminMessageText.val('');
+        },
     });
 
-    var $chalkBoard = $('#chalkboard'),
-                 $clear = $('#clear'),
-                 startX = 0,
-                 startY = 0,
-                 mouseX = 0,
-                 mouseY = 0,
-                 offset = 0,
-                 isMouseDown = false;
+    var $chalkBoard =
+        $('#chalkboard'),
+        $clear = $('#clear'),
+        startX = 0,
+        startY = 0,
+        mouseX = 0,
+        mouseY = 0,
+        offset = 0,
+        isMouseDown = false;
 
     $chalkBoard.bind('mousedown vmousedown', function (e) {
         isMouseDown = true;
@@ -51,7 +62,10 @@ $(function () {
             offset = $chalkBoard.offset();
             startX = e.pageX - offset.left;
             startY = e.pageY - offset.top;
-            hub.lineStarting(startX, startY, "#" + $.connection.hub.id.substr(0, 3));
+            hub.lineStarting({
+                positionX: startX,
+                positionY: startY
+            });
         }
     });
 
@@ -59,7 +73,10 @@ $(function () {
         if (isMouseDown) {
             mouseX = e.pageX - offset.left;
             mouseY = e.pageY - offset.top;
-            hub.lineDrawing(mouseX, mouseY);
+            hub.lineDrawing({ 
+                positionX: mouseX, 
+                positionY: mouseY
+            });
         }
     });
 
@@ -69,6 +86,19 @@ $(function () {
 
     $clear.click(function () {
         hub.clearCanvas();
+    });
+
+    $addAdmin.click(function () {
+        hub.joinAdminGroup();
+    });
+
+    $leaveAdmin.click(function () {
+        hub.leaveAdminGroup();
+    });
+
+    $sendMessageButton.click(function () {
+        var message = $adminMessageText.val();
+        hub.sendMessage(message);
     });
 
     $.connection.hub.start().done(function () {
